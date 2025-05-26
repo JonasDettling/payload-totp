@@ -66,7 +66,7 @@ export const TOTPVerify: React.FC<Args> = (args) => {
 			</p>
 			<Form
 				apiRoute={apiRoute}
-				back={(typeof back === 'string' && back) || undefined}
+				back={(typeof back === 'string' && back !== 'null' && back) || undefined}
 				length={pluginOptions.totp?.digits}
 				serverURL={serverURL}
 			/>
