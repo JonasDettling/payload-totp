@@ -27,23 +27,23 @@
 	},
 	"exports": {
 		".": {
-			"import": "./src/index.ts",
-			"types": "./src/index.ts",
-			"default": "./src/index.ts"
+			"import": "./dist/index.js",
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
 		},
 		"./client": {
-			"import": "./src/exports/client.ts",
-			"types": "./src/exports/client.ts",
-			"default": "./src/exports/client.ts"
+			"import": "./dist/exports/client.js",
+			"types": "./dist/exports/client.d.ts",
+			"default": "./dist/exports/client.js"
 		},
 		"./rsc": {
-			"import": "./src/exports/rsc.ts",
-			"types": "./src/exports/rsc.ts",
-			"default": "./src/exports/rsc.ts"
+			"import": "./dist/exports/rsc.js",
+			"types": "./dist/exports/rsc.d.ts",
+			"default": "./dist/exports/rsc.js"
 		}
 	},
-	"main": "./src/index.ts",
-	"types": "./src/index.ts",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
 	"files": [
 		"dist"
 	],
@@ -62,9 +62,9 @@
 		"lint": "eslint ./src",
 		"lint:fix": "eslint ./src --fix",
 		"prepublishOnly": "pnpm clean && pnpm build",
+		"prepare": "pnpm build",
 		"test": "jest",
-		"e2e:test": "playwright test",
-		"prepare": "pnpm build"
+		"e2e:test": "playwright test"
 	},
 	"devDependencies": {
 		"@eslint/eslintrc": "^3.2.0",
@@ -78,7 +78,7 @@
 		"@payloadcms/ui": "^3.39.1",
 		"@playwright/test": "^1.49.1",
 		"@swc-node/register": "1.10.9",
-		"@swc/cli": "0.5.1",
+		"@swc/cli": "^0.3.0",
 		"@swc/core": "^1.3.107",
 		"@swc/jest": "^0.2.37",
 		"@types/jest": "29.5.12",
