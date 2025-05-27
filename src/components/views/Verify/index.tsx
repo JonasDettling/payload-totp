@@ -34,6 +34,15 @@ export const TOTPVerify: React.FC<Args> = (args) => {
 		searchParams: { back } = {},
 	} = args
 
+	if (back === 'null') {
+		const cleanVerifyUrl = formatAdminURL({
+			adminRoute,
+			path: '/verify-totp', // Or your specific path for TOTP verification
+			serverURL,
+		})
+		redirect(cleanVerifyUrl)
+	}
+
 	const user = _user as unknown as UserWithTotp
 
 	if (!user) {
