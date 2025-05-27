@@ -1,3 +1,5 @@
+'use client'
+
 import type { I18nClient } from '@payloadcms/translations'
 import type { AdminViewProps, ServerComponentProps } from 'payload'
 
@@ -34,6 +36,16 @@ export const TOTPVerify: React.FC<Args> = (args) => {
 		searchParams: { back } = {},
 	} = args
 
+	// Defensive fallback logging
+	console.log('Debug - Initial Props', {
+		adminRoute,
+		apiRoute,
+		back,
+		pluginOptions,
+		serverURL,
+		userRaw: _user,
+	})
+
 	const user = _user as unknown as UserWithTotp
 
 	if (!user) {
@@ -42,19 +54,32 @@ export const TOTPVerify: React.FC<Args> = (args) => {
 			path: '/login',
 			serverURL,
 		})
-
+		console.warn('Debug - No user found, redirecting to login:', url)
 		redirect(url)
 	}
 
-	if (!user.hasTotp || (user.hasTotp && user._strategy === 'totp')) {
+	if (!user.hasTotp || user._strategy === 'totp') {
 		const url = formatAdminURL({
 			adminRoute,
 			path: '/',
 			serverURL,
 		})
-
+		console.warn('Debug - Redirecting away from verify page because of TOTP state:', {
+			hasTotp: user.hasTotp,
+			strategy: user._strategy,
+		})
 		redirect(url)
 	}
+
+	// Sanitize `back` parameter
+	const safeBack =
+		typeof back === 'string' && back !== 'null' && back.length > 0 ? back : undefined
+
+	console.log('Debug - Render verify form with:', {
+		userId: user.id,
+
+		strategy: user._strategy,
+	})
 
 	return (
 		<MinimalTemplate className={styles.root}>
@@ -66,7 +91,7 @@ export const TOTPVerify: React.FC<Args> = (args) => {
 			</p>
 			<Form
 				apiRoute={apiRoute}
-				back={typeof back === 'string' && back.length > 0 ? back : undefined}
+				back={safeBack}
 				length={pluginOptions.totp?.digits}
 				serverURL={serverURL}
 			/>
