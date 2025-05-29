@@ -48,7 +48,15 @@ test.describe(
 		})
 
 		test('should not redirect', async () => {
+			// Test initial load
+			await expect(page).toHaveURL(/^(.*?)\/admin\/verify-totp(\?back=.*?)?$/g)
+
+			// Test page reload
 			await page.reload()
+			await expect(page).toHaveURL(/^(.*?)\/admin\/verify-totp(\?back=.*?)?$/g)
+
+			// Wait a bit and check again to ensure no delayed redirects
+			await page.waitForTimeout(1000)
 			await expect(page).toHaveURL(/^(.*?)\/admin\/verify-totp(\?back=.*?)?$/g)
 		})
 	},

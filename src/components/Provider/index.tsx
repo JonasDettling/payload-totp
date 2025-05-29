@@ -31,18 +31,22 @@ export const TOTPProvider = async (args: Args) => {
 		serverURL: payload.config.serverURL,
 	})
 
+	// Check if we're already on the verify-totp page to prevent redirect loops
+	const isVerifyPage = pathname.includes('/verify-totp')
+	const isSetupPage = pathname.includes('/setup-totp')
+
 	if (
 		user &&
 		user.hasTotp &&
 		!['api-key', 'totp'].includes(user._strategy) &&
-		pathname !== '/verify-totp'
+		!isVerifyPage // Only redirect if we're not already on the verify page
 	) {
 		redirect(`${verifyUrl}?back=${encodeURIComponent(pathname)}`)
 	} else if (
 		user &&
 		!user.hasTotp &&
 		pluginOptions.forceSetup &&
-		pathname !== '/setup-totp' &&
+		!isSetupPage && // Only redirect if we're not already on the setup page
 		user._strategy !== 'api-key'
 	) {
 		redirect(`${setupUrl}?back=${encodeURIComponent(pathname)}`)
